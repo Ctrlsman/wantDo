@@ -4,6 +4,5 @@ mysql_cfg = {
     'user': 'root',
     'password': 'zds819918',
     'database': 'test',
-    'charset': 'utf-8',
     'autocommit': True
 }
