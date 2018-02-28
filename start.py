@@ -10,4 +10,5 @@ from handler import action
 mysql_conn = pymysql.connect(**dev.mysql_cfg)
 cur = mysql_conn.cursor()
 
-app = action.App(200, 150)
+todo = action.Todo()
+todo.mainloop()
