@@ -19,7 +19,11 @@
             {% else %} <tr class="info"> {% endif %}
                 <td>{{ loop.index }}</td>
                 <td>{{ todo.title }}</td>
-                <td>{{ todo.status }}</td>
+                {% if todo.status %}
+                    <td><input type="checkbox" name="optionb" disabled="disabled" checked /></td>
+                {% else %}
+                    <td><input type="checkbox" name="optionb" disabled="disabled" /></td>
+                {% endif %}
                 <td>{{ todo.create_time }}</td>
                 <td>
                     {% if todo.status %}
