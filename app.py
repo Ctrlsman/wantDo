@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding: UTF-8 -*-
+# -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
 
 from flask import (Flask, render_template, redirect, url_for, request, flash)
@@ -45,11 +45,11 @@ def show_todo_list():
 @app.route('/delete/<int:id>')
 @login_required
 def delete_todo_list(id):
-     todolist = TodoList.query.filter_by(id=id).first_or_404()
-     db.session.delete(todolist)
-     db.session.commit()
-     flash('You have delete a todo list')
-     return redirect(url_for('show_todo_list'))
+    todolist = TodoList.query.filter_by(id=id).first_or_404()
+    db.session.delete(todolist)
+    db.session.commit()
+    flash('You have delete a todo list')
+    return redirect(url_for('show_todo_list'))
 
 
 @app.route('/change/<int:id>', methods=['GET', 'POST'])
