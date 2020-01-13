@@ -7,7 +7,11 @@
 ```shell
 git clone https://github.com/Ctrlsman/wantDo.git
 
-mysql -u用户名 -p密码 数据库 < 要导入的数据库数据(schema.sql)
+mysqladmin -u用户名 -密码 create test
+
+mysql -u用户名 -p密码 test < 要导入的数据库数据(schema.sql)
+
+# 注意:建议修改admin密码
 
 settings.py文件中设置你的数据库信息
 
