@@ -8,7 +8,11 @@
         <!-- logout links -->
         {% if current_user.is_authenticated %}
             <ul class="nav navbar-nav pull-right">
-                <li><a class="btn" href="{{ url_for('logout') }}">logout</a></li>
+                <li><a class="btn" href="{{ url_for('logout') }}">注销</a></li>
+            </ul>
+        {% else %}
+            <ul class="nav navbar-nav pull-right">
+                <li><a class="btn" href="{{ url_for('register') }}">注册</a></li>
             </ul>
         {% endif %}
     </nav>

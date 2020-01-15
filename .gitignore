@@ -6,3 +6,4 @@ key
 *.log*
 *.vscode
 __pycache__
+mysetting.py

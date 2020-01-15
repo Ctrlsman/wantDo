@@ -6,10 +6,13 @@ from flask import (Flask, render_template, redirect, url_for, request, flash)
 from flask_bootstrap import Bootstrap
 from flask_login import login_required, login_user, logout_user, current_user
 
-from forms import TodoListForm, LoginForm
+from forms import TodoListForm, LoginForm, RegisterForm
 from ext import db, login_manager
 from models import TodoList, User
-from settings import Dev
+try:
+    from mysetting import Dev
+except Exception:
+    from settings import Dev
 
 SECRET_KEY = 'This is my key'
 
@@ -29,7 +32,7 @@ login_manager.login_view = "login"
 def show_todo_list():
     form = TodoListForm()
     if request.method == 'GET':
-        todolists = TodoList.query.all()
+        todolists = TodoList.query.filter_by(user_id=current_user.id).all()
         return render_template('index.html', todolists=todolists, form=form)
     else:
         if form.validate_on_submit():
@@ -45,7 +48,7 @@ def show_todo_list():
 @app.route('/delete/<int:id>')
 @login_required
 def delete_todo_list(id):
-    todolist = TodoList.query.filter_by(id=id).first_or_404()
+    todolist = TodoList.query.filter_by(id=id, user_id=current_user.id).first_or_404()
     db.session.delete(todolist)
     db.session.commit()
     flash('You have delete a todo list')
@@ -56,7 +59,7 @@ def delete_todo_list(id):
 @login_required
 def change_todo_list(id):
     if request.method == 'GET':
-        todolist = TodoList.query.filter_by(id=id).first_or_404()
+        todolist = TodoList.query.filter_by(id=id, user_id=current_user.id).first_or_404()
         form = TodoListForm()
         form.title.data = todolist.title
         form.status.data = str(todolist.status)
@@ -64,7 +67,7 @@ def change_todo_list(id):
     else:
         form = TodoListForm()
         if form.validate_on_submit():
-            todolist = TodoList.query.filter_by(id=id).first_or_404()
+            todolist = TodoList.query.filter_by(id=id, user_id=current_user.id).first_or_404()
             todolist.title = form.title.data
             todolist.status = form.status.data
             db.session.commit()
@@ -94,6 +97,22 @@ def logout():
     logout_user()
     flash('you have logout!')
     return redirect(url_for('login'))
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if request.method == 'GET':
+        return render_template('register.html', form=form)
+    else:
+        if form.validate_on_submit():
+            user = User(form.username.data, form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Register success!')
+        else:
+            flash(form.errors)
+        return redirect(url_for('login'))
 
 
 @login_manager.user_loader
