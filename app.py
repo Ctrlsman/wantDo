@@ -106,6 +106,10 @@ def register():
         return render_template('register.html', form=form)
     else:
         if form.validate_on_submit():
+            exist_user = User.query.filter_by(username=form.username.data).first()
+            if exist_user:
+                flash('Sorry! This user name already exists')
+                return redirect(url_for('register'))
             user = User(form.username.data, form.password.data)
             db.session.add(user)
             db.session.commit()
